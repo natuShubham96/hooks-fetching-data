@@ -5,6 +5,7 @@ export default function App () {
     const [lists,setLists] = useState([])
     const [query,setQuery] = useState("reacthooks")
     const [loading,setLoading] = useState(false)
+    const [error,setError] =useState(null)
 
     const searchInputRef = useRef()
 
@@ -31,9 +32,14 @@ useEffect(() => {
 
 const getData = async () => {
     setLoading(true)
-    const result = await axios.get(`https://hn.algolia.com/api/v1/search?query=${query}`)
+    try {
+        const result = await axios.get(`https://hn.algolia.com/api/v1/search?query=${query}`)
 
-    setLists(result.data.hits)
+        setLists(result.data.hits)
+    } catch(err) {
+        setError(err)
+    }
+
     setLoading(false)
 }
 
@@ -50,6 +56,8 @@ const getData = async () => {
                 </li>
             </ul>
             )}
+
+            {error && <div>{error.message}</div>}
 
         </div>
     )
