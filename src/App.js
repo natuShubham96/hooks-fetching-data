@@ -1,9 +1,11 @@
-import {useEffect,useState} from 'react';
+import {useEffect,useState,useRef} from 'react';
 import axios from 'axios';
 
 export default function App () {
     const [lists,setLists] = useState([])
     const [query,setQuery] = useState("reacthooks")
+
+    const searchInputRef = useRef()
 
 
     //Using .then for promise resolution
@@ -35,7 +37,8 @@ const getData = async () => {
     return (
         <div>
             <div>
-            <input type="text" placeholder="Type to search" onChange={event => event.target.value===""? setQuery("reacthooks"):setQuery(event.target.value)} style={{borderColor: "black"}}/>
+            <input ref={searchInputRef} type="text"  onChange={event => event.target.value===""? setQuery("reacthooks"):setQuery(event.target.value)}/>
+            <button onClick={() => searchInputRef.current.focus()}>Focus Search Box!!!</button>
             </div>
             {lists.map(data => <ul>
                 <li> 
