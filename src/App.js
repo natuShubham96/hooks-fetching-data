@@ -3,6 +3,7 @@ import axios from 'axios';
 
 export default function App () {
     const [lists,setLists] = useState([])
+    const [query,setQuery] = useState("reacthooks")
 
 
     //Using .then for promise resolution
@@ -23,16 +24,19 @@ export default function App () {
 
 useEffect(() => {
     getData()
-},[])
+},[query])  // adding a value in second array arg of useEffect works like componentUpdate, based on the values added in this array, render will be called
 
 const getData = async () => {
-    const result = await axios.get("https://hn.algolia.com/api/v1/search?query=reacthooks")
+    const result = await axios.get(`https://hn.algolia.com/api/v1/search?query=${query}`)
 
     setLists(result.data.hits)
 }
 
     return (
         <div>
+            <div>
+            <input type="text" placeholder="Type to search" onChange={event => event.target.value===""? setQuery("reacthooks"):setQuery(event.target.value)} style={{borderColor: "black"}}/>
+            </div>
             {lists.map(data => <ul>
                 <li> 
                     <a href={data.url}>{data.title}</a>
